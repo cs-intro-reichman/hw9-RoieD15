@@ -55,7 +55,12 @@ public class LinkedList {
 					"index must be between 0 and size");
 		}
 		//// Replace the following statement with your code
-		return null;
+		Node temp = this.first;
+		int i = 0;
+		while (i <= index) {
+			temp = temp.next;
+		}
+		return temp;
 	}
 	
 	/**
@@ -78,7 +83,25 @@ public class LinkedList {
 	 *         if index is negative or greater than the list's size
 	 */
 	public void add(int index, MemoryBlock block) {
-		//// Write your code here
+		if (index < 0 || index > size) {
+			throw new IllegalArgumentException("Index must be between 0 and size");
+		}
+		if (index == size) {
+			addLast(block);
+			return;
+		}
+		if (index == 0) {
+			addFirst(block);
+			return;
+		}
+		Node cur = first;
+		for (int i = 1; i < index; i++) {
+			cur = cur.next; 
+		}
+		Node newNode = new Node(block);
+		newNode.next = cur.next;
+		cur.next = newNode;
+		size++;
 	}
 
 	/**
