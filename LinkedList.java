@@ -112,7 +112,15 @@ public class LinkedList {
 	 *        the given memory block
 	 */
 	public void addLast(MemoryBlock block) {
-		//// Write your code here
+		Node newNode = new Node(block);
+    	if (first == null) {
+        	first = newNode;
+        	last = newNode;
+    	} else {
+        	last.next = newNode; 
+        	last = newNode;
+		}
+    	size++;
 	}
 	
 	/**
@@ -123,7 +131,20 @@ public class LinkedList {
 	 *        the given memory block
 	 */
 	public void addFirst(MemoryBlock block) {
-		//// Write your code here
+		Node newNode = new Node(block);
+		if(first == null) {
+			first = newNode;
+			last = first;
+			first.next = last;
+		}
+		else {
+			newNode.next = first;
+			first = newNode;
+		}
+		if(first.next == null) {
+			last = first;
+		}
+		size ++;
 	}
 
 	/**
@@ -136,8 +157,15 @@ public class LinkedList {
 	 *         if index is negative or greater than or equal to size
 	 */
 	public MemoryBlock getBlock(int index) {
-		//// Replace the following statement with your code
-		return null;
+		if (index > size || index < 0 || first == null) {
+			throw new IllegalArgumentException(
+					"index must be between 0 and size");
+		}
+		Node n = first;
+		for(int i = 0 ; i < index ; i ++) {
+			n = n.next;
+		}
+		return n.block;
 	}	
 
 	/**
