@@ -232,7 +232,7 @@ public class LinkedList {
 	 */
 	public void remove(int index) {
 		if (index < 0 || index >= size) {
-			throw null;
+			throw new IllegalArgumentException();
 		}
 		if (index == 0) {
 			first = first.next;
@@ -245,6 +245,9 @@ public class LinkedList {
 		Node current = first;
 		for (int i = 0; i < index - 1; i++) {
 			current = current.next;
+		}
+		if (current.next == null) {
+			throw new NullPointerException();
 		}
 		current.next = current.next.next;
 		if (index == size - 1) {
