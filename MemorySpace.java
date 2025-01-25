@@ -90,21 +90,20 @@ public class MemorySpace {
 	 *            the starting address of the block to freeList
 	 */
 	public void free(int address) {
-		if (freeList.getFirst().block.length == 100 && freeList.getSize() == 1 && freeList.getFirst().block.baseAddress == 0) {
-			throw new IllegalArgumentException("index must be between 0 and size");
+		if (freeList.getSize() == 1 && freeList.getFirst().block.baseAddress == 0 && freeList.getFirst().block.length == 100) {
+			throw new IllegalArgumentException(
+					"index must be between 0 and size");
 		}
-		Node t = allocatedList.getNode(0);
+		Node temp = allocatedList.getNode(0);
 		Node match = null;
-		while (t != null) {
-			if(t.block.baseAddress == address) {
-				match = t;
+		while(temp != null) {
+			if(temp.block.baseAddress == address) {
+				match = temp;
 				break;
 			}
-			t = t.next;
+			temp = temp.next;
 		}
-		if (match == null) {
-			return;
-		}
+		if(match == null) return;
 		freeList.addLast(match.block);
 		allocatedList.remove(match.block);
 	}
@@ -131,6 +130,7 @@ public class MemorySpace {
 		while (cur.next != null && cur != null) {
 			MemoryBlock curBlock = cur.block;
 			MemoryBlock nextBlock = cur.next.block;
+	
 			if (curBlock.baseAddress + curBlock.length == nextBlock.baseAddress) {
 				curBlock.length += nextBlock.length;
 				freeList.remove(cur.next);
