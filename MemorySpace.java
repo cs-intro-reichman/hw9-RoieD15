@@ -93,14 +93,14 @@ public class MemorySpace {
 		if (freeList.getFirst().block.length == 100 && freeList.getSize() == 1 && freeList.getFirst().block.baseAddress == 0) {
 			throw new IllegalArgumentException("index must be between 0 and size");
 		}
-		Node n = allocatedList.getNode(0);
+		Node t = allocatedList.getNode(0);
 		Node match = null;
-		while (n != null) {
-			if (n.block.baseAddress == address) {
-				match = n;
+		while (t != null) {
+			if(t.block.baseAddress == address) {
+				match = t;
 				break;
 			}
-			n = n.next;
+			t = t.next;
 		}
 		if (match == null) {
 			return;
@@ -126,16 +126,16 @@ public class MemorySpace {
 		if (freeList.getSize() <= 1) {
 			return;
 		}
-		freeList.sortByBaseAddress(); //sorting the list by the sizes of the bases
-		Node t = freeList.getFirst(); //the first node in the freeList
-		while (t.next != null && t != null) {
-			MemoryBlock curBlock = t.block;
-			MemoryBlock nextBlock = t.next.block;
+		freeList.sortByBaseAddress();
+		Node cur = freeList.getFirst();
+		while (cur.next != null && cur != null) {
+			MemoryBlock curBlock = cur.block;
+			MemoryBlock nextBlock = cur.next.block;
 			if (curBlock.baseAddress + curBlock.length == nextBlock.baseAddress) {
-				curBlock.length = curBlock.length + nextBlock.length;
-				freeList.remove(t.next);
+				curBlock.length += nextBlock.length;
+				freeList.remove(cur.next);
 			} else {
-				t = t.next;
+				cur = cur.next;
 			}
 		}
 	}
