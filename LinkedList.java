@@ -132,7 +132,7 @@ public class LinkedList {
 	 */
 	public void addFirst(MemoryBlock block) {
 		Node newNode = new Node(block);
-		if(first == null) {
+		if (first == null) {
 			first = newNode;
 			last = first;
 			first.next = null;
@@ -178,7 +178,7 @@ public class LinkedList {
 	 */
 	public int indexOf(MemoryBlock block) {
 		Node node = first;
-		for(int i = 0 ; i < size ; i ++) {
+		for (int i = 0 ; i < size ; i ++) {
 			if (node.block.equals(block)) {
 				return i;
 			}
@@ -264,46 +264,49 @@ public class LinkedList {
 	 *         if the given memory block is not in this list
 	 */
 	public void remove(MemoryBlock block) {
-		if(block == null) {
+		if (block == null) {
 			throw new IllegalArgumentException("index must be between 0 and size");
 		}
-		if(indexOf(block) == -1) 
+		if (indexOf(block) == -1) {
 			throw new IllegalArgumentException("index must be between 0 and size");
-		if(first == null) return;
-		Node current = first;
-		if(size == 1 && block.equals(first.block)) {
+		}
+		if (first == null) {
+			return;
+		}
+		Node cur = first;
+		if (size == 1 && block.equals(first.block)) {
+			size = 0;
 			first = null;
 			last = null;
-			size = 0;
 			return;
 		}
 		if (block.equals(first.block)) {
-			first = first.next;
 			size --;
-			if(size == 1) {
+			first = first.next;
+			if (size == 1) {
 				last = first;
 			}
 			return;
 		}
-		while (current.next != null) {
-			if (current.next.block.equals(block) && block.equals(last.block)) {
-				current.next = null;
+		while (cur.next != null) {
+			if (cur.next.block.equals(block) && block.equals(last.block)) {
 				size --;
-				last = current;
-				if(size == 1) {
-					first = current;
+				cur.next = null;
+				last = cur;
+				if (size == 1) {
+					first = cur;
 				}
 				return;
 			}
-			if (current.next.block.equals(block)) {
-				current.next = current.next.next;
+			if (cur.next.block.equals(block)) {
 				size --;
-				if(size == 1) {
+				cur.next = cur.next.next;
+				if (size == 1) {
 					last = first;
 				}
 				return;
 			}
-			current = current.next;
+			cur = cur.next;
 		}
 	}	
 
@@ -327,7 +330,7 @@ public class LinkedList {
     	return ans;
 	}
 
-	public void sortByBaseAddress() {
+	public void sortByBaseAddress() { //A service function to help 
 		for (int i = 0; i < this.size - 1; i++) {
 			for (int j = 0; j < this.size - i - 1; j++) {
 				Node cur = getNode(j);

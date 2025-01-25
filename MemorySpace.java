@@ -61,7 +61,7 @@ public class MemorySpace {
 		Node n = freeList.getFirst();
 		Node match = null;
 		while (n != null) {
-			if(n.block.length >= length) {
+			if (n.block.length >= length) {
 				match = n;
 				break;
 			}
@@ -70,10 +70,10 @@ public class MemorySpace {
 		if (match != null) {
 			MemoryBlock newBlock = new MemoryBlock(match.block.baseAddress , length);
 			allocatedList.addLast(newBlock);
-			match.block.length -= length;
+			match.block.length = match.block.length - length;
 			int address = match.block.baseAddress;
 			match.block.baseAddress = match.block.baseAddress + length;
-			if(match.block.length == 0) {
+			if (match.block.length == 0) {
 				freeList.remove(match);
 			}
 			return address;
@@ -90,20 +90,21 @@ public class MemorySpace {
 	 *            the starting address of the block to freeList
 	 */
 	public void free(int address) {
-		if(freeList.getSize() == 1 && freeList.getFirst().block.baseAddress == 0 && freeList.getFirst().block.length == 100) {
-			throw new IllegalArgumentException(
-					"index must be between 0 and size");
+		if (freeList.getFirst().block.length == 100 && freeList.getSize() == 1 && freeList.getFirst().block.baseAddress == 0) {
+			throw new IllegalArgumentException("index must be between 0 and size");
 		}
-		Node temp = allocatedList.getNode(0);
+		Node n = allocatedList.getNode(0);
 		Node match = null;
-		while(temp != null) {
-			if(temp.block.baseAddress == address) {
-				match = temp;
+		while (n != null) {
+			if (n.block.baseAddress == address) {
+				match = n;
 				break;
 			}
-			temp = temp.next;
+			n = n.next;
 		}
-		if(match == null) return;
+		if (match == null) {
+			return;
+		}
 		freeList.addLast(match.block);
 		allocatedList.remove(match.block);
 	}
@@ -125,17 +126,16 @@ public class MemorySpace {
 		if (freeList.getSize() <= 1) {
 			return;
 		}
-		freeList.sortByBaseAddress();
-		Node cur = freeList.getFirst();
-		while (cur.next != null && cur != null) {
-			MemoryBlock curBlock = cur.block;
-			MemoryBlock nextBlock = cur.next.block;
-	
+		freeList.sortByBaseAddress(); //sorting the list by the sizes of the bases
+		Node t = freeList.getFirst(); //the first node in the freeList
+		while (t.next != null && t != null) {
+			MemoryBlock curBlock = t.block;
+			MemoryBlock nextBlock = t.next.block;
 			if (curBlock.baseAddress + curBlock.length == nextBlock.baseAddress) {
-				curBlock.length += nextBlock.length;
-				freeList.remove(cur.next);
+				curBlock.length = curBlock.length + nextBlock.length;
+				freeList.remove(t.next);
 			} else {
-				cur = cur.next;
+				t = t.next;
 			}
 		}
 	}
