@@ -94,16 +94,18 @@ public class MemorySpace {
 			throw new IllegalArgumentException(
 					"index must be between 0 and size");
 		}
-		Node temp = allocatedList.getNode(0);
+		Node t = allocatedList.getNode(0);
 		Node match = null;
-		while(temp != null) {
-			if(temp.block.baseAddress == address) {
-				match = temp;
+		while (t != null) {
+			if(t.block.baseAddress == address) {
+				match = t;
 				break;
 			}
-			temp = temp.next;
+			t = t.next;
 		}
-		if(match == null) return;
+		if (match == null) {
+			return;
+		}
 		freeList.addLast(match.block);
 		allocatedList.remove(match.block);
 	}
@@ -130,7 +132,6 @@ public class MemorySpace {
 		while (cur.next != null && cur != null) {
 			MemoryBlock curBlock = cur.block;
 			MemoryBlock nextBlock = cur.next.block;
-	
 			if (curBlock.baseAddress + curBlock.length == nextBlock.baseAddress) {
 				curBlock.length += nextBlock.length;
 				freeList.remove(cur.next);
