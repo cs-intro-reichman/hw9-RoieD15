@@ -73,7 +73,9 @@ public class MemorySpace {
 			match.block.length -= length;
 			int address = match.block.baseAddress;
 			match.block.baseAddress = match.block.baseAddress + length;
-			if(match.block.length == 0) freeList.remove(match);
+			if(match.block.length == 0) {
+				freeList.remove(match);
+			}
 			return address;
 		}
 		return -1;
