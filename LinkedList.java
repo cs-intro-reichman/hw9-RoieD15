@@ -50,8 +50,8 @@ public class LinkedList {
 	 * @return the node at the given index
 	 */		
 	public Node getNode(int index) {
-		if (index < 0 || index >= size) {
-			throw new IllegalArgumentException("Index must be between 0 and size - 1");
+		if (index >= size || index < 0) {
+			throw new IllegalArgumentException("Index must be between 0 and size");
 		}
 		Node cur = this.first;
 		for (int i = 0; i < index; i++) {
@@ -60,7 +60,6 @@ public class LinkedList {
 			}
 			cur = cur.next;
 		}
-	
 		return cur; 
 	}
 	
@@ -95,7 +94,7 @@ public class LinkedList {
 			addFirst(block);
 			return;
 		}
-		Node cur = first;
+		Node cur = this.first;
 		for (int i = 0; i < index - 1; i++) {
 			cur = cur.next;
 		}
@@ -178,12 +177,12 @@ public class LinkedList {
 	 * @return the index of the block, or -1 if the block is not in this list
 	 */
 	public int indexOf(MemoryBlock block) {
-		Node temp = first;
+		Node node = first;
 		for(int i = 0 ; i < size ; i ++) {
-			if (temp.block.equals(block)) {
+			if (node.block.equals(block)) {
 				return i;
 			}
-			temp = temp.next;
+			node = node.next;
 		}
 		return -1;
 	}
@@ -196,8 +195,11 @@ public class LinkedList {
 	 *        the node that will be removed from this list
 	 */
 	public void remove(Node node) {
-		if (first == null || node == null) {
+		if (first == null) {
 			return; 
+		}
+		if (node == null) {
+			throw new NullPointerException("ERROR NullPointerException!");
 		}
 		if (node.equals(first)) {
 			first = first.next;
