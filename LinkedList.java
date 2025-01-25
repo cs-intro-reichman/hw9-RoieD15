@@ -244,12 +244,10 @@ public class LinkedList {
 		}
 		Node current = first;
 		for (int i = 0; i < index - 1; i++) {
-			if (current.next != null) {
-				current = current.next;
-			}
-			else {
+			if (current.next == null) {
 				throw new NullPointerException("ERROR NullPointerException!");
 			}
+			current = current.next;
 		}
 		current.next = current.next.next;
 		if (index == size - 1) {
